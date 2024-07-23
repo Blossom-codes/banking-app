@@ -1,6 +1,6 @@
 package com.blossom.banking.dto;
 
-import com.blossom.banking.status.Status;
+import com.blossom.banking.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -21,13 +21,12 @@ public class TransactionDto {
     private Status transaction_status;
     private LocalDateTime date;
 
-    public TransactionDto(Long senderId, String senderName, Long beneficiaryId, String beneficiaryName, Double amount, Status transaction_status, LocalDateTime date) {
+    public TransactionDto(Long senderId, String senderName, Long beneficiaryId, String beneficiaryName, Double amount, Status transaction_status) {
         this.senderId = senderId;
         this.senderName = senderName;
         this.beneficiaryId = beneficiaryId;
         this.beneficiaryName = beneficiaryName;
         this.amount = amount;
         this.transaction_status = transaction_status;
-        this.date = date;
     }
 }

@@ -2,6 +2,7 @@ package com.blossom.banking.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.repository.Query;
 
 import java.sql.Date;
@@ -23,5 +24,6 @@ public class Account {
     @Column(name = "account_holder_balance")
     private Double accountBalance;
     @Column(name = "reg_date")
+    @CreationTimestamp
     private LocalDateTime date;
 }

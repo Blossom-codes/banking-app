@@ -1,11 +1,12 @@
 package com.blossom.banking.entity;
 
-import com.blossom.banking.status.Status;
+import com.blossom.banking.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -37,16 +38,16 @@ public class Transaction {
     @Column(name = "transaction_status")
     private Status transaction_status;
     @Column(name = "transaction_date")
+    @CreationTimestamp
     private LocalDateTime date;
 
-    public Transaction(Long senderId, String senderName, Long beneficiaryId, String beneficiaryName, Double amount, Status transaction_status, LocalDateTime date) {
+    public Transaction(Long senderId, String senderName, Long beneficiaryId, String beneficiaryName, Double amount, Status transaction_status) {
         this.senderId = senderId;
         this.senderName = senderName;
         this.beneficiaryId = beneficiaryId;
         this.beneficiaryName = beneficiaryName;
         this.amount = amount;
         this.transaction_status = transaction_status;
-        this.date = date;
     }
 }
 

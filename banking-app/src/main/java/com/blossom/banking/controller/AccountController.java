@@ -27,7 +27,7 @@ public class AccountController {
     }
 
     //    add account rest api
-    @PostMapping
+    @PostMapping(path = "/register")
     public ResponseEntity<AccountDto> addAccount(@RequestBody AccountDto accountDto) {
         return new ResponseEntity<>(accountService.createAccount(accountDto), HttpStatus.CREATED);
     }
@@ -51,11 +51,20 @@ public class AccountController {
 //        return ResponseEntity.ok(accountService.getAccountById(id));
 //    }
     @GetMapping(path = "/getAccount")
-    public ResponseEntity<AccountDto> getAccountById(@RequestParam(required = true) Long id) {
+    public ResponseEntity<AccountDto> getAccountById(@RequestParam Long id) {
 
         return ResponseEntity.ok(accountService.getAccountById(id));
     }
-
+    @GetMapping(path = "/transactionCount")
+    public  ResponseEntity<Long> getTransactionCount()
+    {
+        return ResponseEntity.ok(transactionService.getTotalNumberOfTransactions());
+    }
+    @GetMapping(path = "/transactions/sent_by")
+    public  ResponseEntity<List<Transaction>> getTransactionBySenderName(@RequestParam String name)
+    {
+        return ResponseEntity.ok(transactionService.getTransactionBySenderName(name));
+    }
     @PutMapping(path = "/{id}/deposit")
     public ResponseEntity<AccountDto> deposit(@PathVariable Long id, @RequestBody Map<String, Double> request) {
         Double amount = request.get("amount");
@@ -69,12 +78,17 @@ public class AccountController {
     }
 
     @PutMapping(path = "/transfer")
-    public ResponseEntity<AccountDto> transfer(@RequestParam Long sender, @RequestParam Long beneficiary, @RequestBody Map<String, Double> amountRequest) {
-//        Long sender = request.get("sender");
-//        Long beneficiary = request.get("beneficiary");
+    public ResponseEntity<TransactionDto> transfer(@RequestParam Long sender, @RequestParam Long beneficiary, @RequestBody Map<String, Double> amountRequest) {
         Double amount = amountRequest.get("amount");
-        ResponseEntity.ok(transactionService.saveTransaction(sender, beneficiary, amount));
-        return ResponseEntity.ok(accountService.transfer(sender, amount, beneficiary));
+        ResponseEntity.ok(accountService.transfer(sender, amount, beneficiary));
+        return ResponseEntity.ok(transactionService.saveTransaction(sender, beneficiary, amount));
+
+    }
+    @PutMapping("/edit")
+    public  ResponseEntity<AccountDto> edit(@RequestParam Long account_number, @RequestBody Map<String, String> request)
+    {
+       String name = request.get("full name");
+        return ResponseEntity.ok(accountService.editAccountName(account_number,name));
     }
 
     @DeleteMapping(path = "/{id}/deleteAccount")

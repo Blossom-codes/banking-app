@@ -21,7 +21,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto createAccount(AccountDto accountDto) {
         Account account = AccountMapper.mapToAccount(accountDto);
-        account.setDate(LocalDateTime.now());
+//        account.setDate(LocalDateTime.now());
         Account savedAccount = accountRepository.save(account);
         return AccountMapper.mapToAccountDto(savedAccount);
     }
@@ -42,10 +42,18 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto deposit(Long id, Double amount) {
 
         Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalStateException("Account doesn't exist"));
-        double total = account.getAccountBalance() + amount;
+        Double total = account.getAccountBalance() + amount;
         account.setAccountBalance(total);
         Account saved = accountRepository.save(account);
         return AccountMapper.mapToAccountDto(saved);
+    }
+
+    @Override
+    public AccountDto editAccountName(Long id, String value) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalStateException("User does not exist"));
+        account.setAccountHolder(value);
+        Account edited = accountRepository.save(account);
+        return AccountMapper.mapToAccountDto(account);
     }
 
     @Override

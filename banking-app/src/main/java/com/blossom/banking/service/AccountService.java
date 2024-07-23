@@ -10,7 +10,7 @@ public interface AccountService {
     List<Account> getAccount();
     AccountDto getAccountById(Long id);
     AccountDto deposit(Long id, Double amount);
-//    AccountDto editAccount(Long id, String value);
+   AccountDto editAccountName(Long id, String value);
     AccountDto withdraw(Long id, Double amount);
     AccountDto transfer(Long id, Double amount, Long beneficiaryAccountNumber);
     void deleteAccount(Long id);
