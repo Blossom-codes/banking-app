@@ -8,10 +8,11 @@ import java.util.List;
 public interface AccountService {
     AccountDto createAccount(AccountDto accountDto);
     List<Account> getAccount();
+    AccountDto getAccountByAccountNumber(String accountNumber);
     AccountDto getAccountById(Long id);
-    AccountDto deposit(Long id, Double amount);
-   AccountDto editAccountName(Long id, String value);
-    AccountDto withdraw(Long id, Double amount);
-    AccountDto transfer(Long id, Double amount, Long beneficiaryAccountNumber);
+    AccountDto deposit(String account_number, Double amount);
+   AccountDto editAccountName(String account_number, String value);
+    AccountDto withdraw(String account_number, Double amount);
+    AccountDto transfer(String senderAccountNumber, Double amount, String beneficiaryAccountNumber);
     void deleteAccount(Long id);
 }

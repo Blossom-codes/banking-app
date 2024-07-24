@@ -7,9 +7,9 @@ public class TransactionMapper {
     public static Transaction mapToTransaction(TransactionDto transactionDto) {
         return new Transaction(
                 transactionDto.getTransactionId(),
-                transactionDto.getSenderId(),
+                transactionDto.getSenderAccount(),
                 transactionDto.getSenderName(),
-                transactionDto.getBeneficiaryId(),
+                transactionDto.getBeneficiaryAccount(),
                 transactionDto.getBeneficiaryName(),
                 transactionDto.getAmount(),
                 transactionDto.getTransaction_status(),
@@ -20,9 +20,9 @@ public class TransactionMapper {
     public static TransactionDto mapToTransactionDto(Transaction transaction) {
         return new TransactionDto(
                 transaction.getTransactionId(),
-                transaction.getSenderId(),
+                transaction.getSenderAccount(),
                 transaction.getSenderName(),
-                transaction.getBeneficiaryId(),
+                transaction.getBeneficiaryAccount(),
                 transaction.getBeneficiaryName(),
                 transaction.getAmount(),
                 transaction.getTransaction_status(),

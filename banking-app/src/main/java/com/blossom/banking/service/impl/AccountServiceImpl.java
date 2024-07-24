@@ -7,8 +7,8 @@ import com.blossom.banking.repository.AccountRepository;
 import com.blossom.banking.service.AccountService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -21,6 +21,14 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto createAccount(AccountDto accountDto) {
         Account account = AccountMapper.mapToAccount(accountDto);
+        String prefix = "310";
+        int min = 1000000;
+        int max = 9999999;
+        Random r = new Random();
+        int num = r.nextInt(min, max);
+        String random = Integer.toString(num);
+
+        account.setAccountNumber(prefix + random);
 //        account.setDate(LocalDateTime.now());
         Account savedAccount = accountRepository.save(account);
         return AccountMapper.mapToAccountDto(savedAccount);
@@ -39,43 +47,58 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDto deposit(Long id, Double amount) {
-
-        Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalStateException("Account doesn't exist"));
-        Double total = account.getAccountBalance() + amount;
-        account.setAccountBalance(total);
-        Account saved = accountRepository.save(account);
-        return AccountMapper.mapToAccountDto(saved);
-    }
-
-    @Override
-    public AccountDto editAccountName(Long id, String value) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalStateException("User does not exist"));
-        account.setAccountHolder(value);
-        Account edited = accountRepository.save(account);
+    public AccountDto getAccountByAccountNumber(String accountNumber) {
+        Account account = accountRepository.findAccountByAccountNumber(accountNumber);
         return AccountMapper.mapToAccountDto(account);
     }
 
     @Override
-    public AccountDto withdraw(Long id, Double amount) {
-
-        Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalStateException("Account doesn't exist"));
-        if (account.getAccountBalance() > amount) {
-            double newBalance = account.getAccountBalance() - amount;
-            account.setAccountBalance(newBalance);
-        } else {
-            throw new IllegalStateException("Insufficient Funds");
+    public AccountDto deposit(String account_number, Double amount) {
+        try {
+            Account account = accountRepository.findAccountByAccountNumber(account_number);
+            Double total = account.getAccountBalance() + amount;
+            account.setAccountBalance(total);
+            Account saved = accountRepository.save(account);
+            return AccountMapper.mapToAccountDto(saved);
+        } catch (Exception e) {
+            throw new IllegalStateException("Account does not exist");
         }
-
-        Account saved = accountRepository.save(account);
-        return AccountMapper.mapToAccountDto(saved);
     }
 
     @Override
-    public AccountDto transfer(Long id, Double amount, Long beneficiaryAccountNumber) {
-        Account sender = accountRepository.findById(id).orElseThrow(() -> new IllegalStateException("Your Account doesn't exist"));
-        Account beneficiary = accountRepository.findById(beneficiaryAccountNumber).orElseThrow(() -> new IllegalStateException("Beneficiary doesn't exist"));
+    public AccountDto editAccountName(String account_number, String value) {
+        try {
+            Account account = accountRepository.findAccountByAccountNumber(account_number);
+            account.setAccountHolder(value);
+            Account edited = accountRepository.save(account);
+            return AccountMapper.mapToAccountDto(edited);
+        } catch (Exception e) {
+            throw new IllegalStateException("Account does not exist");
+        }
+    }
 
+    @Override
+    public AccountDto withdraw(String account_number, Double amount) {
+        try {
+            Account account = accountRepository.findAccountByAccountNumber(account_number);
+            if (account.getAccountBalance() > amount) {
+                Double newBalance = account.getAccountBalance() - amount;
+                account.setAccountBalance(newBalance);
+                Account saved = accountRepository.save(account);
+                return AccountMapper.mapToAccountDto(saved);
+            } else {
+                throw new IllegalStateException("Insufficient Funds");
+            }
+
+        } catch (Exception e) {
+            throw new IllegalStateException("Account doesn't exist");
+        }
+    }
+
+    @Override
+    public AccountDto transfer(String senderAccountNumber, Double amount, String beneficiaryAccountNumber) {
+        Account sender = accountRepository.findAccountByAccountNumber(senderAccountNumber);
+        Account beneficiary = accountRepository.findAccountByAccountNumber(beneficiaryAccountNumber);
         if (sender.getAccountBalance() > amount) {
             Double newBalance = sender.getAccountBalance() - amount;
             sender.setAccountBalance(newBalance);

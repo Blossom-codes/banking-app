@@ -17,8 +17,9 @@ import java.time.LocalDateTime;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "account_number")
-    private Long accountNumber;
+    private String accountNumber;
     @Column(name = "account_holder_name")
     private String accountHolder;
     @Column(name = "account_holder_balance")

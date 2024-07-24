@@ -13,18 +13,18 @@ import java.time.LocalDateTime;
 public class TransactionDto {
 
     private Long transactionId;
-    private Long senderId;
+    private String senderAccount;
     private String senderName;
-    private Long beneficiaryId;
+    private String beneficiaryAccount;
     private String beneficiaryName;
     private Double amount;
     private Status transaction_status;
     private LocalDateTime date;
 
     public TransactionDto(Long senderId, String senderName, Long beneficiaryId, String beneficiaryName, Double amount, Status transaction_status) {
-        this.senderId = senderId;
+        this.senderAccount = senderAccount;
         this.senderName = senderName;
-        this.beneficiaryId = beneficiaryId;
+        this.beneficiaryAccount = beneficiaryAccount;
         this.beneficiaryName = beneficiaryName;
         this.amount = amount;
         this.transaction_status = transaction_status;

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TransactionService {
-    TransactionDto saveTransaction(Long senderId, Long beneficiary, Double amount);
+    TransactionDto saveTransaction(String senderAccount, String beneficiaryAccount, Double amount);
 
     List<Transaction> getAllTransaction();
 

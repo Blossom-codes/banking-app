@@ -25,13 +25,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public TransactionDto saveTransaction(Long senderId, Long beneficiaryId, Double amount) {
-        Account sender = accountRepository.findById(senderId).orElseThrow(() -> new IllegalStateException("Sender account number doesn't exist"));
-        Account beneficiary = accountRepository.findById(beneficiaryId).orElseThrow(() -> new IllegalStateException("Beneficiary account number doesn't exist"));
+    public TransactionDto saveTransaction(String senderAccountNumber, String beneficiaryAccountNumber, Double amount) {
+        Account sender = accountRepository.findAccountByAccountNumber(senderAccountNumber);
+        Account beneficiary = accountRepository.findAccountByAccountNumber(beneficiaryAccountNumber);
 
         String sent_by = sender.getAccountHolder();
         String received_by = beneficiary.getAccountHolder();
-        Transaction transaction = new Transaction(senderId, sent_by, beneficiaryId, received_by, amount, Status.SUCCESS);
+        Transaction transaction = new Transaction(senderAccountNumber, sent_by, beneficiaryAccountNumber, received_by, amount, Status.SUCCESS);
         Transaction saved = transactionRepository.save(transaction);
         return TransactionMapper.mapToTransactionDto(saved);
     }

@@ -24,12 +24,12 @@ public class Transaction {
     @Column(name = "transaction_id")
     private Long transactionId;
     //    @JoinColumn(table = "accounts", foreignKey = senderId)
-    @Column(name = "sender_id")
-    private Long senderId;
+    @Column(name = "sender_account")
+    private String senderAccount;
     @Column(name = "sent_by")
     private String senderName;
-    @Column(name = "beneficiary_id")
-    private Long beneficiaryId;
+    @Column(name = "beneficiary_account")
+    private String beneficiaryAccount;
     @Column(name = "received_by")
     private String beneficiaryName;
     @Column(name = "amount")
@@ -41,10 +41,10 @@ public class Transaction {
     @CreationTimestamp
     private LocalDateTime date;
 
-    public Transaction(Long senderId, String senderName, Long beneficiaryId, String beneficiaryName, Double amount, Status transaction_status) {
-        this.senderId = senderId;
+    public Transaction(String senderAccount, String senderName, String beneficiaryAccount, String beneficiaryName, Double amount, Status transaction_status) {
+        this.senderAccount = senderAccount;
         this.senderName = senderName;
-        this.beneficiaryId = beneficiaryId;
+        this.beneficiaryAccount = beneficiaryAccount;
         this.beneficiaryName = beneficiaryName;
         this.amount = amount;
         this.transaction_status = transaction_status;

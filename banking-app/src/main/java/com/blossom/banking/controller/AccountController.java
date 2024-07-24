@@ -40,6 +40,12 @@ public class AccountController {
     public ResponseEntity<List<Transaction>> getAllTransactions() {
         return ResponseEntity.ok(transactionService.getAllTransaction());
     }
+    @GetMapping(path = "/user")
+    public ResponseEntity<AccountDto> getAccountByAccountNumber(@RequestBody Map<String, String> request) {
+        String account_number = request.get("account_number");
+        return ResponseEntity.ok(accountService.getAccountByAccountNumber(account_number));
+    }
+
     @GetMapping(path = "/transaction")
     public ResponseEntity<TransactionDto> getTransactionById(@RequestParam Long id) {
         return ResponseEntity.ok(transactionService.getTransactionById(id));
@@ -65,34 +71,35 @@ public class AccountController {
     {
         return ResponseEntity.ok(transactionService.getTransactionBySenderName(name));
     }
-    @PutMapping(path = "/{id}/deposit")
-    public ResponseEntity<AccountDto> deposit(@PathVariable Long id, @RequestBody Map<String, Double> request) {
+    @PutMapping(path = "/deposit")
+    public ResponseEntity<AccountDto> deposit(@RequestParam String account_number, @RequestBody Map<String, Double> request) {
         Double amount = request.get("amount");
-        return ResponseEntity.ok(accountService.deposit(id, amount));
+        return ResponseEntity.ok(accountService.deposit(account_number, amount));
     }
 
-    @PutMapping(path = "/{id}/withdraw")
-    public ResponseEntity<AccountDto> withdraw(@PathVariable Long id, @RequestBody Map<String, Double> request) {
+    @PutMapping(path = "/withdraw")
+    public ResponseEntity<AccountDto> withdraw(@RequestParam String account_number, @RequestBody Map<String, Double> request) {
         Double amount = request.get("amount");
-        return ResponseEntity.ok(accountService.withdraw(id, amount));
+        return ResponseEntity.ok(accountService.withdraw(account_number, amount));
     }
 
     @PutMapping(path = "/transfer")
-    public ResponseEntity<TransactionDto> transfer(@RequestParam Long sender, @RequestParam Long beneficiary, @RequestBody Map<String, Double> amountRequest) {
+    public ResponseEntity<TransactionDto> transfer(@RequestParam String sender, @RequestParam String beneficiary, @RequestBody Map<String, Double> amountRequest) {
         Double amount = amountRequest.get("amount");
         ResponseEntity.ok(accountService.transfer(sender, amount, beneficiary));
         return ResponseEntity.ok(transactionService.saveTransaction(sender, beneficiary, amount));
 
     }
     @PutMapping("/edit")
-    public  ResponseEntity<AccountDto> edit(@RequestParam Long account_number, @RequestBody Map<String, String> request)
+    public  ResponseEntity<AccountDto> edit(@RequestBody Map<String, String> request)
     {
-       String name = request.get("full name");
+       String name = request.get("full_name");
+       String account_number = request.get("account_number");
         return ResponseEntity.ok(accountService.editAccountName(account_number,name));
     }
 
-    @DeleteMapping(path = "/{id}/deleteAccount")
-    public ResponseEntity<String> deleteAccount(@PathVariable Long id) {
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<String> deleteAccount(@RequestParam Long id) {
         accountService.deleteAccount(id);
         return ResponseEntity.ok("Account has been deleted successfully");
     }
